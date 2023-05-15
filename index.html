@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        grid-gap: 10px;
+        justify-items: center;
+        align-items: center;
+        height: 500px;
+        width: 500px;
+      }
+      .grid-item {
+
+        height: 100%;
+        width: 100%;
+      }
+	 img{
+		 width: 120px;
+		 height: 120px;
+	 }
+    </style>
+  </head>
+  <body>
+	  <h1>打地鼠小游戏</h1>
+	  <table>
+		 <tr>
+		 	<td>游戏时间</td>
+		 	<td>
+		 		<input type="text" id="gameTime" value="1" onkeyup="time()">分钟
+		 	</td>
+		 </tr>
+		 <tr>
+		 	<td>倒计时间</td>
+		 	<td><span id="timeOut">60</span>秒</td>
+		 </tr>
+		 <tr>
+		 	<td>地鼠出现间隔</td>
+		 	<td>
+		 		<input type="text" id="remainTime" name="remainTime" value="1"/>秒
+		 	</td>
+		 </tr>
+		 <tr>
+		 	<td>停留时间</td>
+		 	<td>
+		 		<input type="text" id="stayTime" value="1"/>秒
+		 	</td>
+		 </tr>
+		 <tr>
+		 	<td>得分情况</td>
+		 	<td>
+
+				<input type="text" id="score" value="0">分</td>
+		 </tr>
+		 <tr>
+		 	<td>
+				<input type="button" value="开始游戏" id="btn1" onclick="time();startGame();showin();btn1();">
+			</td>
+		 	<td>
+				 <input type="button" value="结束游戏" id="btn2" onclick="stopGame();btn2();" disabled><br>
+			</td>
+		 </tr> 
+	  </table>
+
+    <div class="grid">
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+      <div class="grid-item"><img src="img/00.jpg" alt=""></div>
+    </div>
+
+	<script type="text/javascript">	
+		var dishu = document.getElementsByTagName('img');
+		var nums = 0;
+		var stop;
+		var stop1;
+		var stop2;			
+		function time(){
+			sum = 0;
+			document.getElementById("score").value = 0;
+			document.getElementById("timeOut").innerHTML = (document.getElementById("gameTime").value)*60;
+		}	
+		function startGame(){
+			var timeOut = document.getElementById("timeOut").innerHTML;
+			timeOut--;	
+			document.getElementById("timeOut").innerHTML = timeOut;		
+			if(timeOut==0){
+				return;
+			}			
+			stop = setTimeout("startGame()",1000);
+		}	
+		function btn1()	{	
+			document.getElementById("btn1").disabled = true;		
+			document.getElementById("btn2").disabled = false;
+		}
+
+		function btn2(){
+			document.getElementById("btn1").disabled = false;		
+			document.getElementById("btn2").disabled = true;
+		}
+		//地鼠显示方法  
+		function showin() {
+			remainTime = document.getElementById("remainTime").value;
+			nums = Math.floor(Math.random() * dishu.length);
+			dishu[nums].src = 'img/01.jpg';
+			dishu[nums].style.marginTop = 'auto';
+			dishu[nums].setAttribute("onclick", "beat()")
+			stop1 = setTimeout("hideof()",remainTime*1000);							
+		}		
+		//击打地鼠方法  	
+		function beat(){
+			dishu[nums].src = 'img/02.jpg';
+			sum += 10;
+			document.getElementById('score').value = sum;		
+		}		
+		 //地鼠隐藏方法  
+		function hideof() {
+			stayTime = document.getElementById('stayTime').value;
+			dishu[nums].src = 'img/00.jpg';
+			dishu[nums].removeAttribute("onclick");	
+			stop2 = setTimeout("showin()",stayTime*1000);		
+			var timeOut = document.getElementById("timeOut").innerHTML;			
+			if(timeOut==0){
+				clearTimeout(stop2);
+			}	
+		}		
+		function stopGame() {
+			clearTimeout(stop);
+			clearTimeout(stop1);
+			clearTimeout(stop2);
+			document.getElementById("timeOut").innerHTML = parseInt(document.getElementById("gameTime").value)*60;
+			
+			// 遍历所有的图片
+			for(var i=0;i<dishu.length;i++){
+				dishu[nums].src = 'img/00.jpg';
+			}
+		}
+	</script>
+  </body>
+</html>
